@@ -20,8 +20,7 @@ function App() {
         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         const rgbData = buildRgb(imageData.data);
         const quantColors = quantization(rgbData, 0);
-        console.log(quantColors);
-        const splicedColors = quantColors.splice(0 , 5)
+        const splicedColors = quantColors.splice(0, 5)
         setRgbArray(splicedColors)
         orderByLuminance(splicedColors)
       };
@@ -108,6 +107,7 @@ function App() {
       color.r = Math.round(color.r / rgbValues.length);
       color.g = Math.round(color.g / rgbValues.length);
       color.b = Math.round(color.b / rgbValues.length);
+      color.average = ((color.r + color.g + color.b) / 3 / 10).toFixed(2)
 
       return [color];
 
@@ -130,12 +130,18 @@ function App() {
       <h1>Color palette creator</h1>
       <form >
         <input type="file" accept="image/gif, image/jpeg, image/png" id="imgfile" />
-        <input type="button" id="btnLoad" value="Load" onClick={() => loadImage()} />
+        <input type="button" id="btnLoad" value="Load" onClick={() => loadImage()} /> 
       </form>
       <canvas style={{ height: 200, width: 200, objectFit: "contain" }} id="canvas"></canvas>
       <div className="rgb-array">
-      {rgbArray.length ? rgbArray.map((rgb,index) => <div className='rgb-item' style={{backgroundColor: `rgb(${rgb.r},${rgb.g},${rgb.b})`}} key={index}> R : {rgb.r} G : {rgb.g} B : {rgb.b}  </div> ) : '' }
-        </div>
+        {rgbArray.length ? rgbArray.map((rgb, index) => <div className='rgb-item' style={{ backgroundColor: `rgb(${rgb.r},${rgb.g},${rgb.b})` }} key={index}>
+          <p> R : {rgb.r}</p>
+          <p>G : {rgb.g}</p>
+          <p>B : {rgb.b}</p>
+          <p>{rgb.average}%</p>
+        </div>)
+          : ''}
+      </div>
 
     </div>
   );
